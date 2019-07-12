@@ -1,0 +1,7 @@
+.idea/
+.env
+/storage/logs
+/vendor
+
+.DS_Store
+.DS_Store?
