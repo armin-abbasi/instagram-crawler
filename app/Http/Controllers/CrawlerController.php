@@ -8,36 +8,46 @@ use GuzzleHttp\Client;
 
 class CrawlerController extends Controller
 {
+    private $baseURI = 'https://www.instagram.com/explore/tags/%D9%81%D8%B1%D8%A7%D8%AA%D8%B1%D8%A8%D8%B1%D9%88/?__a=1';
+
     public function getPosts()
     {
-        $uri = 'https://www.instagram.com/explore/tags/%D9%81%D8%B1%D8%A7%D8%AA%D8%B1%D8%A8%D8%B1%D9%88/?__a=1';
-
         try {
-            $this->getNodes($uri);
+            $this->getNodes();
             return Post::all()->count();
+//            return \Redis::command('DBSIZE');
         } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+            \Log::error($e);
         }
     }
 
-    private function getNodes($uri, $maxId = null)
+    private function getNodes($maxId = null)
     {
         $client = new Client();
         $post = new Post();
+        $uri = $this->baseURI;
 
         // Add Max ID if included.
-        $uri = $maxId ? $uri . '&max_id=' . $maxId : $uri;
+        if ($maxId) {
+            $uri .= '&max_id=' . $maxId;
+        }
 
         $response = json_decode($client->request('GET', $uri)->getBody()->getContents());
 
         $edge_info = $response->graphql->hashtag->edge_hashtag_to_media;
 
-        foreach ($edge_info->edges as $edge) {
+        foreach ($edge_info->edges as $key => $edge) {
             $post->insert((array)$edge);
         }
 
+        /*\Redis::pipeline(function ($pipe) use ($edge_info) {
+            foreach ($edge_info->edges as $key => $edge) {
+                $pipe->set($edge->node->id, json_encode($edge));
+            }
+        });*/
+
         if ($edge_info->page_info->has_next_page) {
-            $this->getNodes($uri, $edge_info->page_info->end_cursor);
+            $this->getNodes($edge_info->page_info->end_cursor);
         }
     }
 }
