@@ -3,9 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Moloquent\Eloquent\Model as MoloquentModel;
+use Jenssegers\Mongodb\Eloquent\Model as Moloquent;
 
-class Post extends MoloquentModel
+class Post extends Moloquent
 {
     //
 }
