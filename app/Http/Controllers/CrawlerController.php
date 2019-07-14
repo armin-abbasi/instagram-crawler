@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\PersistDataJob;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
@@ -14,7 +15,7 @@ class CrawlerController extends Controller
     {
         try {
             $this->getNodes();
-            return Post::all()->count();
+//            return Post::all()->count();
 //            return \Redis::command('DBSIZE');
         } catch (\Exception $e) {
             \Log::error($e);
@@ -36,9 +37,11 @@ class CrawlerController extends Controller
 
         $edge_info = $response->graphql->hashtag->edge_hashtag_to_media;
 
-        foreach ($edge_info->edges as $key => $edge) {
+        dispatch(new PersistDataJob($edge_info->edges));
+
+        /*foreach ($edge_info->edges as $key => $edge) {
             $post->insert((array)$edge);
-        }
+        }*/
 
         /*\Redis::pipeline(function ($pipe) use ($edge_info) {
             foreach ($edge_info->edges as $key => $edge) {
