@@ -14,6 +14,7 @@ ie: `php7.2-mongodb`
 
 2. Run ```php artisan posts:store --hashtag=love``` in your CLI
 this command will store all the retrieved data into `redis` or any other queue driver of your favor.
-you need to run ```php artisan queue:work``` to trigger the queue worker and persist your data in mongodb database.
+
+> You need to run ```php artisan queue:work``` to trigger the queue worker and persist your data in mongodb database.
 
 > Note that you can avoid using `--hashtag` option which will end up scrapping data using a pre-defined value.
