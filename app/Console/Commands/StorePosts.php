@@ -57,7 +57,7 @@ class StorePosts extends Command
         $this->hashTag = $this->option('hashtag') ?? $this->hashTag;
 
         try {
-            // Call recursive function
+            // Call recursive function and dispatch in a queue
             $this->getNodes();
 
             $this->info('All posts successfully inserted into database!');
