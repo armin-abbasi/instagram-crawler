@@ -30,11 +30,18 @@ class PersistDataJob implements ShouldQueue
      *
      * @param Post $post
      * @return void
+     * @throws \Exception
      */
     public function handle(Post $post)
     {
-        foreach ($this->nodes as $node) {
-            $post->insert((array)$node);
+        try {
+            // Persist all nodes into database
+            foreach ($this->nodes as $node) {
+                $post->insert((array)$node);
+            }
+        } catch (\Exception $e) {
+            \Log::error($e);
+            throw new \Exception("Failed to persist posts in the database");
         }
     }
 }
