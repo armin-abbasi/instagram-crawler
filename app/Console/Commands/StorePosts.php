@@ -60,7 +60,7 @@ class StorePosts extends Command
             // Call recursive function and dispatch in a queue
             $this->getNodes();
 
-            $this->info('All posts successfully inserted into database!');
+            $this->info('Retrieved all data successfully!');
 
         } catch (\Exception $e) {
             
