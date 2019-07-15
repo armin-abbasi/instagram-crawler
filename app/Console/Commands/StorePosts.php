@@ -57,18 +57,26 @@ class StorePosts extends Command
         $this->hashTag = $this->option('hashtag') ?? $this->hashTag;
 
         try {
-            // Recursive function
+            // Call recursive function
             $this->getNodes();
 
             $this->info('All posts successfully inserted into database!');
+
         } catch (\Exception $e) {
+            
             \Log::error($e);
 
             $this->warn('Operation failed due to the following reasons: ');
+
             $this->error($e->getMessage());
         }
     }
 
+    /**
+     * Recursive function to retrieve all the nodes.
+     * 
+     * @param string|null $maxId
+     */
     private function getNodes($maxId = null)
     {
         $uri = str_replace(':hashtag', $this->hashTag, self::BASE_URI);
@@ -82,7 +90,7 @@ class StorePosts extends Command
 
         $edge_info = $response->graphql->hashtag->edge_hashtag_to_media;
 
-        $this->info('Dispatching a persist job with ' . count($edge_info->edges) . ' number of nodes');
+        $this->line('Dispatching a persist job with ' . count($edge_info->edges) . ' number of nodes');
 
         dispatch(new PersistDataJob($edge_info->edges));
 

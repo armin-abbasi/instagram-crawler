@@ -13,7 +13,7 @@ class PersistDataJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $nodes;
+    private $edges;
 
     /**
      * Create a new job instance.
@@ -22,7 +22,7 @@ class PersistDataJob implements ShouldQueue
      */
     public function __construct($edges)
     {
-        $this->nodes = $edges;
+        $this->edges = $edges;
     }
 
     /**
@@ -36,8 +36,8 @@ class PersistDataJob implements ShouldQueue
     {
         try {
             // Persist all nodes into database
-            foreach ($this->nodes as $node) {
-                $post->insert((array)$node);
+            foreach ($this->edges as $edge) {
+                $post->insert((array)$edge->node);
             }
         } catch (\Exception $e) {
             \Log::error($e);
