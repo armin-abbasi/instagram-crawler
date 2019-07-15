@@ -15,8 +15,6 @@ class PersistDataJob implements ShouldQueue
 
     private $nodes;
 
-    private $model;
-
     /**
      * Create a new job instance.
      *
@@ -30,14 +28,13 @@ class PersistDataJob implements ShouldQueue
     /**
      * Execute the job.
      *
+     * @param Post $post
      * @return void
      */
-    public function handle()
+    public function handle(Post $post)
     {
-        $this->model = new Post();
-
         foreach ($this->nodes as $node) {
-            $this->model->insert((array)$node);
+            $post->insert((array)$node);
         }
     }
 }
