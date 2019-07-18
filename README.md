@@ -7,7 +7,7 @@ You need to have these technologies installed on your machine:
 * redis
 
 > Also don't forget about the mongodb driver for your version of php
-ie: `php7.2-mongodb`
+> ie : `php7.2-mongodb`
 
 ## Usage
 1. Run ```composer install``` 
