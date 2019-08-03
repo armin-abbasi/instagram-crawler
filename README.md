@@ -6,12 +6,12 @@ You need to have these technologies installed on your machine:
 * mongodb
 * redis
 
-> Also don't forget about the mongodb driver for your version of php, ie : `php7.2-mongodb`
+> Also don't forget about the mongodb driver corresponding to your php version, ie : `php7.2-mongodb`
+
+> Run ```composer install``` to install required packages
 
 ## Usage
-1. Run ```composer install``` 
-
-2. Run ```php artisan posts:store --hashtag=love``` in your CLI, this will queue all the retrieved data.
+> Run ```php artisan posts:store --hashtag=love``` in your CLI, this will queue all the retrieved data.
 
 > You need to run ```php artisan queue:work``` to trigger the queue worker and persist your data in mongodb database.
 
