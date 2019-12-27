@@ -51,6 +51,7 @@ class StorePosts extends Command
      * Execute the console command.
      *
      * @return mixed|void
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function handle()
     {
@@ -74,8 +75,9 @@ class StorePosts extends Command
 
     /**
      * Recursive function to retrieve all the nodes.
-     * 
+     *
      * @param string|null $maxId
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function getNodes($maxId = null)
     {
