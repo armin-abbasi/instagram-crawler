@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\PersistDataJob;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 
 class StorePosts extends Command
@@ -51,7 +52,7 @@ class StorePosts extends Command
      * Execute the console command.
      *
      * @return mixed|void
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function handle()
     {
@@ -60,15 +61,10 @@ class StorePosts extends Command
         try {
             // Call recursive function and dispatch in a queue
             $this->getNodes();
-
             $this->info('Retrieved all data successfully!');
-
         } catch (\Exception $e) {
-            
             \Log::error($e);
-
             $this->warn('Operation failed due to the following reasons: ');
-
             $this->error($e->getMessage());
         }
     }
@@ -77,7 +73,7 @@ class StorePosts extends Command
      * Recursive function to retrieve all the nodes.
      *
      * @param string|null $maxId
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     private function getNodes($maxId = null)
     {
@@ -89,10 +85,9 @@ class StorePosts extends Command
         }
 
         $response = json_decode($this->client->request('GET', $uri)->getBody()->getContents());
-
         $edge_info = $response->graphql->hashtag->edge_hashtag_to_media;
 
-        $this->line('Dispatching a persist job with ' . count($edge_info->edges) . ' number of nodes');
+        $this->info('Dispatching a persist job with ' . count($edge_info->edges) . ' number of nodes');
 
         dispatch(new PersistDataJob($edge_info->edges));
 

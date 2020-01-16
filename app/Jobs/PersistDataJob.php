@@ -37,7 +37,15 @@ class PersistDataJob implements ShouldQueue
         try {
             // Persist all nodes into database
             foreach ($this->edges as $edge) {
-                $post->insert((array)$edge->node);
+                $data = [
+                    'post_id' => $edge->node->id,
+                    'caption' => $edge->node->edge_media_to_caption->edges[0]->node->text,
+                    'timestamp' => $edge->node->taken_at_timestamp,
+                    'display_url' => $edge->node->display_url,
+                    'owner_id' => $edge->node->owner->id
+                ];
+
+                $post->insert((array)$data);
             }
         } catch (\Exception $e) {
             \Log::error($e);
