@@ -16,3 +16,7 @@ You need to have these technologies installed on your machine:
 > You need to run ```php artisan queue:work``` to trigger the queue worker and persist your data in mongodb database.
 
 > Note that you can avoid using `--hashtag` option which will end up scrapping data using a pre-defined value.
+
+## Elasticsearch
+You can index your stored data into elasticsearch by utilizing this command :
+```php artisan posts:index```
