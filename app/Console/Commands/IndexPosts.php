@@ -13,7 +13,7 @@ class IndexPosts extends Command
      *
      * @var string
      */
-    protected $signature = 'posts:index';
+    protected $signature = 'posts:index {--index_name=}';
 
     const CHUNK_SIZE = 150;
 
@@ -43,9 +43,11 @@ class IndexPosts extends Command
     {
         $this->line('<fg=yellow>Indexing into elasticsearch...</>');
 
-        Post::chunk(self::CHUNK_SIZE, function ($chunks) {
+        $index = $this->option('index_name') ?: 'feeds';
+
+        Post::chunk(self::CHUNK_SIZE, function ($chunks) use ($index) {
             $this->line('<fg=green>Queuing ' . count($chunks) . ' records for indexing</>');
-            dispatch(new ElasticsearchBulkInsertJob('feeds', $chunks->toArray()));
+            dispatch(new ElasticsearchBulkInsertJob($index, $chunks->toArray()));
         });
     }
 }
