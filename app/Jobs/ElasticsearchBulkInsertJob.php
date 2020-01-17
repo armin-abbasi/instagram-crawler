@@ -57,7 +57,7 @@ class ElasticsearchBulkInsertJob implements ShouldQueue
             $dataToIndex['body'][] = [
                 'post_id' => $data['post_id'],
                 'caption' => $data['caption'],
-                'date' => $data['timestamp'],
+                'date' => date('Y-m-d H:i:s', $data['timestamp']),
                 'display_url' => $data['display_url'],
                 'user_id' => $data['owner_id']
             ];
