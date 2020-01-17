@@ -20,3 +20,4 @@ You need to have these technologies installed on your machine:
 ## Elasticsearch
 You can index your stored data into elasticsearch by utilizing this command :
 ```php artisan posts:index```
+> Use `index_name` to index data with your desired index name.
